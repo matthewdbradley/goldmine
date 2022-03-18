@@ -82,8 +82,8 @@ getUCSCTable <- function(table, genome, cachedir=NULL, version="latest", sync=TR
 		cachedir.sql <- tempfile()
 
 		# Download
-		download.file(url.dl.txt, cachedir.txt.gz, quiet=FALSE)
-		download.file(url.dl.sql, cachedir.sql, quiet=FALSE)
+		download.file(url.dl.txt, cachedir.txt.gz, method = "wget", quiet=FALSE)
+		download.file(url.dl.sql, cachedir.sql, method = "wget", quiet=FALSE)
 
 		# Gunzip the file
 		R.utils::gunzip(cachedir.txt.gz, cachedir.txt, overwrite=TRUE, remove=TRUE)
@@ -172,7 +172,7 @@ syncUCSCTable <- function(table, genome, url, cachedir)
 		print(paste("Server version (", mtime.remote, ") is different than our latest (", file.latest,"), downloading new table...",sep=""))
 
 		# Download the file
-		download.file(url.dl.txt, cachedir.file.txt, quiet=FALSE)
+		download.file(url.dl.txt, cachedir.file.txt, method = "wget", quiet=FALSE)
 
 		# Gunzip the file
 		R.utils::gunzip(cachedir.file.txt, overwrite=TRUE, remove=TRUE)
@@ -188,7 +188,7 @@ syncUCSCTable <- function(table, genome, url, cachedir)
 
 		# Download table.sql
 		# The timestamp is only checked for the .txt table, we pull a new SQL every time it changes to make things simpler (this way when the user wants a version the timestamps are the same between the SQL and the TXT)
-		download.file(url.dl.sql, cachedir.file.sql, quiet=FALSE)
+		download.file(url.dl.sql, cachedir.file.sql, method = "wget", quiet=FALSE)
 
 		# Create archive versions with datestamp in the file name of both the TXT and SQL files
 		timestamp <- as.character(strptime(mtime.remote, format="%a, %d %b %Y %T", tz="GMT"))
