@@ -16,7 +16,7 @@
 #; @param fread Use fread() from data.table and return a data.table object rather than the possibly much slower read.table() from base. Set to FALSE if you want a data.frame returned rather than a data.table. Default: TRUE
 #' @return A data.frame or data.table of the desired UCSC table.
 #' @export
-getUCSCTable <- function(table, genome, cachedir=NULL, version="latest", sync=TRUE, url="http://hgdownload.cse.ucsc.edu/goldenPath/", fread=TRUE)
+getUCSCTable <- function(table, genome, cachedir=NULL, version="latest", sync=TRUE, url="ftp://hgdownload.cse.ucsc.edu/goldenPath/", fread=TRUE)
 {
 	# If we need to sync and a cachedir path has been given
 	if((!is.null(cachedir))&(sync==TRUE))
@@ -266,8 +266,8 @@ table_url_is_valid <- function(url)
 {
 	# Replace old url.exists function call with more sophisticated httr cURL request to ftp server. Disable EPSV to avoid timeouts in FTP.
 	# url.exists() returns a 401 unauthorized call if no authentication is passed.
-	req <- GET(url, authenticate("anonymous", ""), ftp_use_epsv = FALSE)
-	if(req$status_code < 300) return(TRUE) else return(FALSE)
+	req <- HEAD(url, authenticate("anonymous", ""), ftp_use_epsv = FALSE)
+	if(req$status_code == 350) return(TRUE) else return(FALSE)
 }
 
 # --------------------------------------------------------------------
