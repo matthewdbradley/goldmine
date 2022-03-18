@@ -266,7 +266,7 @@ table_url_is_valid <- function(url)
 {
 	# Replace old url.exists function call with more sophisticated httr cURL request to ftp server. Disable EPSV to avoid timeouts in FTP.
 	# url.exists() returns a 401 unauthorized call if no authentication is passed.
-	req <- GET("ftp://hgdownload.cse.ucsc.edu/goldenPath/hg38/database/gc5BaseBw.txt.gz", authenticate("anonymous", ""), ftp_use_epsv = FALSE)
+	req <- GET(url, authenticate("anonymous", ""), ftp_use_epsv = FALSE)
 	if(req$status_code < 300) return(TRUE) else return(FALSE)
 }
 
