@@ -74,7 +74,7 @@ getUCSCTable <- function(table, genome, cachedir=NULL, version="latest", sync=TR
 		url.dl.sql <- paste(url, genome , "/database/",table,".sql",sep="")
 
 		# Check that these URIs point to actual files (i.e. this table exists and we could download it if we want to)
-		if((!table_url_is_valid(url.dl.txt))|(!table_url_is_valid(url.dl.txt))) {stop(paste("Error: Could not open table data URLs (",url.dl.txt," and ",url.dl.sql,"). Is the table name correct?",sep=""))}
+		#if((!table_url_is_valid(url.dl.txt))|(!table_url_is_valid(url.dl.txt))) {stop(paste("Error: Could not open table data URLs (",url.dl.txt," and ",url.dl.sql,"). Is the table name correct?",sep=""))}
 
 		# Get tempfiles
 		cachedir.txt.gz <- tempfile()
@@ -130,7 +130,7 @@ syncUCSCTable <- function(table, genome, url, cachedir)
 	url.dl.sql <- paste(url, genome , "/database/",table,".sql",sep="")
 
 	# Check that these URIs point to actual files (i.e. this table exists and we could download it if we want to)
-	if((!table_url_is_valid(url.dl.txt))|(!table_url_is_valid(url.dl.txt))) {stop(paste("Error: Could not open table data URLs (",url.dl.txt," and ",url.dl.sql,"). Is the table name correct?",sep=""))}
+	#if((!table_url_is_valid(url.dl.txt))|(!table_url_is_valid(url.dl.txt))) {stop(paste("Error: Could not open table data URLs (",url.dl.txt," and ",url.dl.sql,"). Is the table name correct?",sep=""))}
 
 	# Create genome directory if it does not exist
 	cachedir.dir.genome <- file.path(cachedir,genome)
