@@ -74,7 +74,7 @@ getUCSCTable <- function(table, genome, cachedir=NULL, version="latest", sync=TR
 		url.dl.sql <- paste(url, genome , "/database/",table,".sql",sep="")
 
 		# Check that these URIs point to actual files (i.e. this table exists and we could download it if we want to)
-		if((!RCurl::url.exists(url.dl.txt))|(!RCurl::url.exists(url.dl.sql))) {stop(paste("Error: Could not open table data URLs (",url.dl.txt," and ",url.dl.sql,"). Is the table name correct?",sep=""))}
+		if((!table_url_is_valid(url.dl.txt))|(!table_url_is_valid(url.dl.txt))) {stop(paste("Error: Could not open table data URLs (",url.dl.txt," and ",url.dl.sql,"). Is the table name correct?",sep=""))}
 
 		# Get tempfiles
 		cachedir.txt.gz <- tempfile()
@@ -130,7 +130,7 @@ syncUCSCTable <- function(table, genome, url, cachedir)
 	url.dl.sql <- paste(url, genome , "/database/",table,".sql",sep="")
 
 	# Check that these URIs point to actual files (i.e. this table exists and we could download it if we want to)
-	if((!RCurl::url.exists(url.dl.txt))|(!RCurl::url.exists(url.dl.sql))) {stop(paste("Error: Could not open table data URLs (",url.dl.txt," and ",url.dl.sql,"). Is the table name correct?",sep=""))}
+	if((!table_url_is_valid(url.dl.txt))|(!table_url_is_valid(url.dl.txt))) {stop(paste("Error: Could not open table data URLs (",url.dl.txt," and ",url.dl.sql,"). Is the table name correct?",sep=""))}
 
 	# Create genome directory if it does not exist
 	cachedir.dir.genome <- file.path(cachedir,genome)
@@ -257,6 +257,18 @@ read.table.ucsc <- function(path)
 	read.table(file=path, comment.char="", header=TRUE, stringsAsFactors=FALSE, sep="\t", quote="")
 }
 # --------------------------------------------------------------------
+
+# --------------------------------------------------------------------
+# Checking valid tables from FTP server
+# Input: Table URL
+# Output: Boolean
+table_url_is_valid <- function(url)
+{
+	# Replace old url.exists function call with more sophisticated httr cURL request to ftp server. Disable EPSV to avoid timeouts in FTP.
+	# url.exists() returns a 401 unauthorized call if no authentication is passed.
+	req <- GET("ftp://hgdownload.cse.ucsc.edu/goldenPath/hg38/database/gc5BaseBw.txt.gz", authenticate("anonymous", ""), ftp_use_epsv = FALSE)
+	if(req$status_code < 300) return(TRUE) else return(FALSE)
+}
 
 # --------------------------------------------------------------------
 # Table reading function for big tables - autodetects types from first 5 rows
